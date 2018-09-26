@@ -1,0 +1,60 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+
+```{r}
+library(tidyverse)
+library(reshape2)
+d <- read_delim("forboxplot.csv", delim = ";")
+```
+
+```{r}
+str(d)
+```
+
+```{r}
+d_long <- melt(d)
+#d_long <- d %>% melt()
+
+#c(2, 3) %>% sum() %>% sqrt()
+
+
+#sqrt(sum(c(2, 3)))
+```
+```{r}
+d_long$variable <- d_long$variable %>%  str_replace_all( "^ ", "")
+```
+
+
+```{r}
+d_long1 <- d_long %>% separate(variable, c("exp", "time", "min"), sep = " " )
+```
+
+```{r}
+d_long1$time <- str_replace_all(d_long1$time, "h", "")
+d_long1$time <- str_replace_all(d_long1$time, "1", "60")
+d_long1$time <- as.numeric(d_long1$time)
+```
+
+```{r}
+d_long1$`MazF regulon` <- d_long1$`MazF regulon` %>% str_replace_all("yes", "MazF regulon")
+d_long1$`MazF regulon` <- d_long1$`MazF regulon` %>% str_replace_all("no", "other proteins")
+```
+
+```{r}
+d_long1$exp <- d_long1$exp %>% str_replace_all("MazF", "MazF expression")
+```
+
+```{r}
+d_long1 <- d_long1 %>% select(-min)
+```
+
+facet_wrap()
+facet_grid()
+
+```{r}
+ggplot(d_long1, aes(x = value, fill=exp)) + geom_histogram()
+```
+
