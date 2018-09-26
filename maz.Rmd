@@ -1,0 +1,19 @@
+---
+title: "R Notebook"
+output: github_document
+---
+
+```{r}
+library(tidyverse)
+library(reshape2)
+```
+
+```{r}
+(df1 <- read_csv2("forboxplot.csv"))
+```
+
+```{r}
+group_by(df1, `MazF regulon`) %>% summarise(N=n())
+count(df1, `MazF regulon`)
+```
+
